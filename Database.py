@@ -135,20 +135,21 @@ def findBetterKey(l,k):
         trycount += 1
         ++alltries
         ++currentkeytry
+        ++count
         CurrentLeague=leagueimport("2020","Premier League")
         CurrentLeague=simLeague(CurrentLeague,k)
         acc=giveacc(CurrentLeague,k)
         PrintkeyAccuracy(acc)
-        condition=((acc.resultRatio < reqres + 0.001 or acc.homeRatio < reqh or acc.drawRatio < reqd) or acc.awayRatio < reqa)
-        ++count
+        condition=((acc.resultRatio < reqres or acc.homeRatio < reqh or acc.drawRatio < reqd) or acc.awayRatio < reqa)
+        print(lasth != acc.guessedHomeRatio or lastd != acc.guessedDrawRatio or lasta != acc.guessedAwayRatio)
         if (condition):
-            if (lasth != acc.guessedHomeRatio or lastd != acc.guessedDrawRatio or lasta != acc.guessedAwayRatio):
                 lasth = acc.guessedHomeRatio
                 lastd = acc.guessedDrawRatio
                 lasta = acc.guessedAwayRatio
                 --count
                 k = FixKeyAcc(acc)
-            if (count > 50 or acc.resultRatio < 0.3 or currentkeytry > 400):
+        if (count > 5 or acc.resultRatio < 0.3 or currentkeytry > 40):
+                print("aa")
                 k = randomKey()
                 count = 0
                 currentkeytry = 0

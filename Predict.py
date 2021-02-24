@@ -131,9 +131,9 @@ def decideResult(m,k):
     aProb=aProb/total
     if(hProb>dProb and hProb>aProb):
         m.machinePredict="H"
-    if(dProb>hProb and dProb>aProb):
+    elif(dProb>hProb and dProb>aProb):
         m.machinePredict="D"
-    if(aProb>dProb and aProb>hProb):
+    elif(aProb>dProb and aProb>hProb):
         m.machinePredict="A"
     return m
 def poisson(mean):
@@ -182,11 +182,9 @@ def decideScore(m, t1, t2):
             if (trys < 0):
                 expectedGoals2 = poisson(hometeam_PossibleGoals)
                 expectedGoals1 = expectedGoals2 + 1
-
     if (((m.result == "F") and (m.machinePredict == "D")) or (m.result == "D")):
         expectedGoals1 = poisson((hometeam_PossibleGoals + awayteam_PossibleGoals) / 2)
         expectedGoals2 = expectedGoals1
-
     if (((m.result == "F") and (m.machinePredict == "A")) or (m.result == "A")):
         while (expectedGoals1 >= expectedGoals2):
             expectedGoals2 = poisson(awayteam_PossibleGoals)
