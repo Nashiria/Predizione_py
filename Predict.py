@@ -135,6 +135,7 @@ def decideResult(m,k):
         m.machinePredict="D"
     elif(aProb>dProb and aProb>hProb):
         m.machinePredict="A"
+
     return m
 def poisson(mean):
     return math.ceil(mean)

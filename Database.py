@@ -1,7 +1,7 @@
 import Match,json,League,Predict,weightkey,random
 from Accuracy import Accuracy
 from Team import Team
-
+guessafterpercentageofmatches=10
 with open('soccer_2001-2020 2 .json', 'r') as outfile:
     f=outfile.read()
     database=json.loads(f)
@@ -13,13 +13,13 @@ def simLeague(l,k):
     for match in l.matches:
         team1id=0
         team2id=0
-
         for team in l.Teamlist:
             if team.teamname == match.home_team:
                 team1id=l.Teamlist.index(team)
             if team.teamname == match.away_team:
                 team2id = l.Teamlist.index(team)
-        match=Predict.predictmatch(match,k,l.Teamlist[team1id],l.Teamlist[team2id],l)
+        if(l.matches.index(match)>len(l.matches)/guessafterpercentageofmatches):
+            match=Predict.predictmatch(match,k,l.Teamlist[team1id],l.Teamlist[team2id],l)
         l.updatewresult(match.home_team,match.away_team,match.home_score,match.away_score)
         l.totalmatch+=1
         if match.result == "H":
@@ -191,9 +191,6 @@ def findBetterKey(l,k):
             Templist.append(CurrentLeague.Teamlist[indexofmaxteam])
             CurrentLeague.Teamlist.remove(CurrentLeague.Teamlist[indexofmaxteam])
         CurrentLeague.Teams = Templist
-
-
-
 def keytrans(text):
     newk=weightkey.weightkey
     text=text.replace("Home:","").replace("Draw:","").replace("Away:","").replace("powerRank:","").replace("resultPerc:","").replace("pyEx:","").replace("pyExSide:","").replace("pattern1:","").replace("pattern3:","").replace("pattern5:","")
@@ -212,37 +209,38 @@ def keytrans(text):
 def giveacc(l,k):
     currentAccuracy=Accuracy(l.leagueName)
     for curr in l.results:
-        currentAccuracy.totalMatch+=1
-        if (curr.machinePredict == "D"):
-            currentAccuracy.guessedDraw+=1
-        if (curr.machinePredict == "H"):
-            currentAccuracy.guessedHome+=1
-        if (curr.machinePredict == "A"):
-           currentAccuracy.guessedAway+=1
-        if (curr.CorrectAwayScore):
-            currentAccuracy.correctAwayGoal+=1
-        else:
-            currentAccuracy.wrongAwayGoal+=1
-        if (curr.CorrectHomeScore):
-            currentAccuracy.correctHomeGoal+=1
-        else:
-            currentAccuracy.wrongHomeGoal+=1
-        if (curr.CorrectResult):
-            if (curr.result == "D"):
-                currentAccuracy.correctDraw+=1
-            if (curr.result == "H"):
-                currentAccuracy.correctHome+=1
-            if (curr.result == "A"):
-                currentAccuracy.correctAway+=1
-            currentAccuracy.correctResult+=1
-        else:
-            currentAccuracy.wrongResult+=1
-            if (curr.result == "D"):
-                currentAccuracy.wrongDraw+=1
-            if (curr.result == "H"):
-                currentAccuracy.wrongHome+=1
-            if (curr.result == "A"):
-                currentAccuracy.wrongAway+=1
+        if(l.results.index(curr)>len(l.results)/guessafterpercentageofmatches):
+            currentAccuracy.totalMatch+=1
+            if (curr.machinePredict == "D"):
+                currentAccuracy.guessedDraw+=1
+            if (curr.machinePredict == "H"):
+                currentAccuracy.guessedHome+=1
+            if (curr.machinePredict == "A"):
+               currentAccuracy.guessedAway+=1
+            if (curr.CorrectAwayScore):
+                currentAccuracy.correctAwayGoal+=1
+            else:
+                currentAccuracy.wrongAwayGoal+=1
+            if (curr.CorrectHomeScore):
+                currentAccuracy.correctHomeGoal+=1
+            else:
+                currentAccuracy.wrongHomeGoal+=1
+            if (curr.CorrectResult):
+                if (curr.result == "D"):
+                    currentAccuracy.correctDraw+=1
+                if (curr.result == "H"):
+                    currentAccuracy.correctHome+=1
+                if (curr.result == "A"):
+                    currentAccuracy.correctAway+=1
+                currentAccuracy.correctResult+=1
+            else:
+                currentAccuracy.wrongResult+=1
+                if (curr.result == "D"):
+                    currentAccuracy.wrongDraw+=1
+                if (curr.result == "H"):
+                    currentAccuracy.wrongHome+=1
+                if (curr.result == "A"):
+                    currentAccuracy.wrongAway+=1
     currentAccuracy.homeGoalRatio = currentAccuracy.correctHomeGoal / currentAccuracy.totalMatch
     currentAccuracy.awayGoalRatio = currentAccuracy.correctAwayGoal / currentAccuracy.totalMatch
     currentAccuracy.resultRatio = currentAccuracy.correctResult / currentAccuracy.totalMatch
