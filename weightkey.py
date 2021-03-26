@@ -9,7 +9,9 @@ class weightkey:
     pattern1: float
     pattern3: float
     pattern5: float
-    def __init__(self, home: float, draw: float, away: float, powerRank: float, resultPerc: float, pyEx: float, pyExSide: float, pattern1: float, pattern3: float, pattern5: float) -> None:
+
+    def __init__(self, home: float, draw: float, away: float, powerRank: float, resultPerc: float, pyEx: float,
+                 pyExSide: float, pattern1: float, pattern3: float, pattern5: float) -> None:
         self.home = home
         self.draw = draw
         self.away = away

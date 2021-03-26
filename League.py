@@ -7,6 +7,7 @@
 #     result = league_from_dict(json.loads(json_string))
 
 from typing import Any, List, TypeVar, Callable, Type, cast
+
 from Team import Team
 
 T = TypeVar("T")
@@ -59,6 +60,7 @@ class Match:
     CorrectGoalCount: bool
     homeTeamGoalRatio: float
     awayTeamGoalRatio: float
+
     def __init__(self, home_team: str, away_team: str, home_score: int, away_score: int, result: str) -> None:
         self.home_team = home_team
         self.away_team = away_team
@@ -111,15 +113,16 @@ class League:
     matches: List[Match]
     results: List[Match]
     leagueName: str
-    year:int
-    leaguesize:int
-    totalmatch:int
-    homewin:int
-    draw:int
-    awaywin:int
-    homescored:int
-    awayscored:int
-    Teamlist:List[Team]
+    year: int
+    leaguesize: int
+    totalmatch: int
+    homewin: int
+    draw: int
+    awaywin: int
+    homescored: int
+    awayscored: int
+    Teamlist: List[Team]
+
     def __init__(self, teams: List[str], matches: List[Match]) -> None:
         self.teams = teams
         self.matches = matches
@@ -130,25 +133,24 @@ class League:
         self.awaywin = 0
         self.homescored = 0
         self.awayscored = 0
-        self.Teamlist=[]
+        self.Teamlist = []
         self.results = []
 
-    def getteamid(self,name):
+    def getteamid(self, name):
         for team in self.Teamlist:
-            if team.teamname==name:
-                    return self.Teamlist.index(team)
+            if team.teamname == name:
+                return self.Teamlist.index(team)
             else:
                 return -1
-    def updatewresult(self,team1,team2,score1,score2):
-        t1=self.getteamid(team1)
-        t2=self.getteamid(team2)
-        result=""
-        if score1>score2:
-            result="H"
-        if score2>score1:
-            result="A"
+
+    def updatewresult(self, t1, t2, score1, score2):
+        result = ""
+        if score1 > score2:
+            result = "H"
+        if score2 > score1:
+            result = "A"
         else:
-            result="D"
+            result = "D"
         self.Teamlist[t1].homeGoals += score1
         self.Teamlist[t1].homeConcede += score2
         self.Teamlist[t2].awayGoals += score2
@@ -170,7 +172,7 @@ class League:
             self.Teamlist[t2].loses += 1
             self.Teamlist[t2].awayLoses += 1
             self.Teamlist[t2].awayForm += "L"
-            self.Teamlist[t1].points+=3
+            self.Teamlist[t1].points += 3
         if result == "D":
             self.Teamlist[t1].form += "D"
             self.Teamlist[t1].draws += 1
@@ -192,12 +194,14 @@ class League:
             self.Teamlist[t2].awayWin += 1
             self.Teamlist[t2].awayForm += "W"
             self.Teamlist[t2].points += 3
+
     @staticmethod
     def from_dict(obj: Any) -> 'League':
         assert isinstance(obj, dict)
         teams = from_list(from_str, obj.get("teams"))
         matches = from_list(Match.from_dict, obj.get("matches"))
         return League(teams, matches)
+
     def to_dict(self) -> dict:
         result: dict = {}
         result["teams"] = from_list(from_str, self.teams)

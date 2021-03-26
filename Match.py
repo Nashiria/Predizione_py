@@ -8,30 +8,38 @@
 
 from typing import Any, TypeVar, Type, cast
 
-
 T = TypeVar("T")
+
 
 def from_str(x: Any) -> str:
     assert isinstance(x, str)
     return x
+
+
 def from_int(x: Any) -> int:
     assert isinstance(x, int) and not isinstance(x, bool)
     return x
+
+
 def to_class(c: Type[T], x: Any) -> dict:
     assert isinstance(x, c)
     return cast(Any, x).to_dict()
+
+
 class Match:
     home_team: str
     away_team: str
     home_score: int
     away_score: int
     result: str
+
     def __init__(self, home_team: str, away_team: str, home_score: int, away_score: int, result: str) -> None:
         self.home_team = home_team
         self.away_team = away_team
         self.home_score = home_score
         self.away_score = away_score
         self.result = result
+
     @staticmethod
     def from_dict(obj: Any) -> 'Match':
         assert isinstance(obj, dict)
